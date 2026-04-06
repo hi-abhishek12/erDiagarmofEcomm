@@ -1,0 +1,69 @@
+users [icon: user, color: blue] {
+  userId serail pk
+  username varchar(100) NOT NULL unique
+  email varchar(322) NOT NULL unique
+  password varchar(256)
+  phone varchar (15) NOT NULL
+  createdAt timestamp
+  UpdatedAt timestamp
+  accessToken varchar(256)
+  refreshToken varchar(256)
+
+}
+
+orders [icon: book, color: green] {
+  orderId: serial pk
+  userId: int fk
+  totalAmount: decimal(10,2) not null
+  status: enum ['pending','confirmed','shipped','delivered','cancelled']
+  address text not null
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+order_items [icon: list, color: blue] {
+  id: serial pk
+  orderId: int fk
+  productId: int fk
+  quantity: int not null
+  price: number
+}
+
+products [icon : watch , color : yellow]{
+  productId  serail pk
+  orderId fk
+  productName varchar(50) NOT NULL
+  price number 
+  condition  enum ['good','poor','average']
+  description text
+  productImage text
+  discount number default 0
+  isAvailable boolean default 0
+  color varchar(25)
+  size varchar (10)
+  isThriftProducts boolean
+}
+
+
+payments [icon : cash , color : orange]{
+  paymentId  pk NOT NULL
+  orderId fk
+  amount number
+  transcationId varchar(50)
+  createdAt timestamp
+  paymentStatus enum[paid , unpaid , cancelled]
+}
+
+stock [icon : table]{
+  stockId: serial pk
+  productId: number fk
+  quantity: number
+}
+
+orders.userId > users.userId
+order_items.orderId > orders.orderId
+order_items.productId > products.productId
+
+payments.orderId > orders.orderId
+stock.productId > products.productId
+
